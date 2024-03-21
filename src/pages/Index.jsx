@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Box, Heading, Input, Button, Text, VStack, HStack, IconButton, Spacer, useColorModeValue } from "@chakra-ui/react";
+import { Box, Heading, Input, Button, Text, VStack, HStack, IconButton, Spacer, useColorModeValue, Checkbox } from "@chakra-ui/react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 
 const Index = () => {
   const [todos, setTodos] = useState([]);
+  const [completedTodos, setCompletedTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
   const addTodo = () => {
@@ -31,7 +32,17 @@ const Index = () => {
         {todos.map((todo, index) => (
           <Box key={index} p={4} bg={useColorModeValue("white", "gray.800")} borderRadius="md" boxShadow="md">
             <HStack>
-              <Text>{todo}</Text>
+              <Checkbox
+                isChecked={completedTodos.includes(index)}
+                onChange={() => {
+                  if (completedTodos.includes(index)) {
+                    setCompletedTodos(completedTodos.filter((i) => i !== index));
+                  } else {
+                    setCompletedTodos([...completedTodos, index]);
+                  }
+                }}
+              />
+              <Text textDecoration={completedTodos.includes(index) ? "line-through" : "none"}>{todo}</Text>
               <Spacer />
               <IconButton icon={<FaTrash />} colorScheme="red" size="sm" onClick={() => deleteTodo(index)} aria-label="Delete todo" />
             </HStack>
